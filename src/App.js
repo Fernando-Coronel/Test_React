@@ -1,23 +1,46 @@
-import logo from './logo.svg';
+import { useState} from 'react';
 import './App.css';
+import Tabla from './components/Tabla';
+import Clima from './components/Clima';
+import Formulario from './components/Formulario';
 
 function App() {
+    const [resultado, setResultado] = useState({
+        estado: '',
+        nombre: ''
+    });
+
+    //const {estado, nombre} = resultado;
+
+    //useEffect(() => {
+    //  console.log(estado);
+    //},[estado,nombre]);
+
+    const consultarAPI = async() => {
+    const API = 'https://api.datos.gob.mx/v1/condiciones-atmosfericas';
+
+    const respuesta = await fetch(API);
+    const resultado = await respuesta.json();
+    console.log(resultado);
+
+    setResultado(resultado);
+  }
+
+  setResultado();
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Aplicacion de Pronostico</h1>
+      <button onClick={consultarAPI}>Buscar...</button>
+      <Tabla/>
+      <Clima
+        resultado={resultado}
+      />
+      <Formulario
+      resultado={resultado}
+      setResultado={setResultado}
+      />
     </div>
   );
 }
